@@ -42,7 +42,7 @@ function jacobi(a){
 }
 
 module.exports.jac = (m,n) => {
-    s = null
+    s = ""
     if( 0 == n % 2 ){
         alert("The bottom number must be odd");
         return;
