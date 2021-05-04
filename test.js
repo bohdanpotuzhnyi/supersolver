@@ -21,7 +21,7 @@ bot.on('text', (ctx) => {
         s = jacobi.jac(m1, n1)
     }
     ctx.reply(s)
-    s = ""
+    s = null
 })
 
 if (clusterWorkerSize > 1) {
