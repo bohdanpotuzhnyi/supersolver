@@ -1,3 +1,4 @@
+//check
 var s = ""
 function jacobi(a){
     var b = new Object(); b[0] = 1; b[1] = 1; b[2] = 1; // Array(1,1,1);
