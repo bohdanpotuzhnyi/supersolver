@@ -1,4 +1,4 @@
-var s = "";
+var s = ""
 function jacobi(a){
     var b = new Object(); b[0] = 1; b[1] = 1; b[2] = 1; // Array(1,1,1);
     var sign = a[0];
@@ -42,7 +42,7 @@ function jacobi(a){
 }
 
 module.exports.jac = (m,n) => {
-
+    s = null
     if( 0 == n % 2 ){
         alert("The bottom number must be odd");
         return;
