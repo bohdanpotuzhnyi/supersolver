@@ -29,7 +29,7 @@
                        solving +=  num + "!" + i1 + "\n";
                   }
               }
-              solving += "step " + i1 + " = " + s.get(i1) + "\n";
+              //solving += "step " + i1 + " = " + s.get(i1) + "\n";
         } else {
               if (prime(i1)) {
                   solving += num + "!" + i1 + "\n";

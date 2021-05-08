@@ -18,7 +18,7 @@ bot.on('text', (ctx) => {
         var m1=parseInt(ss[1])
         var n1=parseInt(ss[2])
 
-        s = jacobi.jac(m1, n1)
+        s = jacobi.jac_custom(m1, n1)
     }
     ctx.reply(s)
     s = null
