@@ -1,45 +1,4 @@
 const basic = require("./basic.js")
-function jacobi(a){
-    var b = new Object(); b[0] = 1; b[1] = 1; b[2] = 1; // Array(1,1,1);
-    var sign = a[0];
-    var m = a[1];
-    var n = a[2];
-    if( sign > 0 ) s+=("("+m+"/"+n+") = ");
-    if( sign < 0 ) s+=("-("+m+"/"+n+") = ");
-    if( m > n-1 ) {
-        m = m % n;
-        if( sign > 0 ) s+=("("+m+"/"+n+") = ");
-        if( sign < 0 ) s+=("-("+m+"/"+n+") = ");
-    }
-    m = m % n;
-    if( m == 0 ){
-        s+=("0");
-        return 0;
-    }
-    if( m == 1 ) {
-        if( sign > 0 ) { s+=("1"); return 1; }
-        s+=("-1"); return -1;
-    }
-    var J2n = 1;
-    if( (3 == (n%8)) || (5 == (n%8)) ) J2n = -1;
-    if( 0 == (m%2) ) {
-        b[0] = J2n*sign;
-        b[1] = m/2;
-        b[2] = n;
-        return jacobi(b);
-    }
-    if( (3 == (n%4)) && (3 == (m%4)) ) {
-        b[0] = -sign;
-        b[1] = n % m;
-        b[2] = m;
-        return jacobi(b);
-    } else {
-        b[0] = sign;
-        b[1] = n % m;
-        b[2] = m;
-        return jacobi(b);
-    }
-}
 
 s = ""
 s_custom = ""
@@ -52,13 +11,14 @@ function get_main(arr, q){
     res = ""
     for(i = 1; i<q; i++){
         if(arr[i].n != prev_n){
-            res += `(${temp} + / + n + )`
+            res += `\\left ( \\frac{${temp}}{${prev_n}} \\right )`
             temp = arr[i].p
             prev_n = arr[i].n
         }else{
             temp *= arr[i].p
         }
     }
+    res += `\\left ( \\frac{${temp}}{${prev_n}} \\right )`
     return res;
 }
 
@@ -67,7 +27,8 @@ function simplify(arr, q){
     solv = ""
     arr1 = []
     for(i = 0; i < q; i++){
-        solv += `(${arr[i].p}/${arr[i].n})^${arr[i].pow}`
+        //`\\left(\\frac{${arr[i].p}}${{arr[i].n}^{${arr[i].pow}}}\\right)`
+        solv += `\\left(\\frac{${arr[i].p}}{${arr[i].n}^{${arr[i].pow}}}\\right)`
     }
     solv += ` = `
     k = 0
@@ -77,15 +38,14 @@ function simplify(arr, q){
             ch = true
         }else{
             if(arr[i].pow > 1){
-                solv += `(${arr[i].p}/${arr[i].n})^1`
+                //`\\left(\\frac{${arr[i].p}}${{arr[i].n}^1}\\right)`
+                solv += `\\left(\\frac{${arr[i].p}}{${arr[i].n}^1}\\right)`
                 temp = {"p": arr[i].p, "n": arr[i].n, "pow":1}
                 arr1.push(temp)
-                //console.log(arr1[0])
                 k++
                 ch = true;
             }else{
-                //console.log("hello")
-                solv += `(${arr[i].p}/${arr[i].n})^1`
+                solv += `\\left(\\frac{${arr[i].p}}{${arr[i].n}^1}\\right)`
                 temp = {"p": arr[i].p, "n": arr[i].n, "pow":1}
                 arr1.push(temp)
                 k++
@@ -100,7 +60,7 @@ module.exports.jac_custom = (a,n) => {
     s_custom = ""
     f = true
     if (basic.gcd(a,n)>1){
-        s_custom = `0 оскільки gcd(${a}, ${n}) = ${basic.gcd(a,n)}`
+        s_custom = `0\\,оскільки\\gcd(${a}, ${n}) = ${basic.gcd(a,n)}`
         f = false
         return s_custom
     }
@@ -109,7 +69,7 @@ module.exports.jac_custom = (a,n) => {
     arr = []
     //adding n for all primes
 
-    s_custom = `(${a}/${n}) = `
+    s_custom = `\\left ( \\frac{${a}}{${n}} \\right ) = `
 
     if(a != 1){
         factor = basic.factor(a);
@@ -141,7 +101,8 @@ module.exports.jac_custom = (a,n) => {
             main = ``
         }
         if(curr_a == 1){
-            s_custom += `(1/${curr_n})${main} = 1*${prefix}${main} = `
+            //solv += `\\left(\\frac{1}{${curr_n}}\\right)
+            s_custom += `\\left(\\frac{1}{${curr_n}}\\right)${main} = 1*${prefix}${main} = `
             factor.q -= 1
             factor.arr.shift()
             if(q = 1){
@@ -156,7 +117,7 @@ module.exports.jac_custom = (a,n) => {
         }
         if(curr_a == -1){
             pow = (curr_n - 1)/2
-            s_custom += `${prefix}(-1/${curr_n})${main} = (-1)^((${curr_n} - 1)/2)*${prefix}*${main} = (-1)^(${pow})*${prefix}*${main} = `
+            s_custom += `${prefix}\\left(\\frac{-1}{${curr_n}}\\right)${main} = (-1)^{\\frac{${curr_n} - 1}{2}}*${prefix}*${main} = (-1)^{${pow}}*${prefix}*${main} = `
             if(pow % 2 != 0){prefix *= -1}
             s_custom += `${prefix}*${main} = `
             factor.q -= 1
@@ -177,7 +138,7 @@ module.exports.jac_custom = (a,n) => {
         }
         if(curr_a == 2){
             pow = (curr_n*curr_n - 1)/8
-            s_custom += `${prefix}(2/${curr_n})${main} = ${prefix}*(-1)^((${curr_n}^2-1)/8) ${main} = ${prefix}*(-1)^${pow} ${main} = `
+            s_custom += `${prefix}\\left(\\frac{2}{${curr_n}}\\right)${main} = ${prefix}*(-1)^{\\frac{${curr_n}^2-1}{8}} ${main} = ${prefix}*(-1)^{${pow}}${main} = `
             if(pow % 2 != 0){prefix *= -1}
             s_custom += `${prefix}${main} = `
             //s_custom += prefix + "(-1)^" +  + "(" + curr_a + "/" + curr_n + ")" + main + " = "
@@ -196,7 +157,8 @@ module.exports.jac_custom = (a,n) => {
             }
         }
         pow = ((curr_a-1)*(curr_n-1))/4
-        s_custom +=`${prefix}(-1)^(((${curr_a}-1)/2)*((${curr_n}-1)/2))(${curr_n}/${curr_a})${main} = ${prefix}(-1)^${pow}(${curr_n % curr_a}/${curr_a})${main} = `
+        //\\left(\\frac{${curr_n % curr_a}}{${curr_a}}\\right)
+        s_custom +=` ${prefix}(-1)^{\\frac{${curr_a}-1}{2}\\frac{${curr_n}-1}{2}}\\left(\\frac{${curr_n}}{${curr_a}}\\right)${main} = ${prefix}(-1)^{${pow}}\\left(\\frac{${curr_n % curr_a}}{${curr_a}}\\right)${main} = `
         t = curr_a
         curr_a = curr_n % t
         curr_n = t
