@@ -10,6 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "http": "^0.0.1-security",
+    "sharp": "^0.28.1",
+    "https": "^1.0.0",
     "cluster": "^0.7.7",
     "os": "^0.1.1",
     "telegraf": "^4.3.0"
