@@ -4,7 +4,7 @@ const cluster = require("cluster");
 const { Telegraf } = require('telegraf');
 const jacobi = require('./scripts/jacobi.js');
 
-const token = '1691713249:AAG6g1uwDsNs6aaI6uX6GQEOnWX5zaXjKwc';
+const token = '1681110137:AAEmEwDuJFK-lps4pD4uL6LKPrSE3zRtACI';
 const bot = new Telegraf(token);
 
 const clusterWorkerSize = os.cpus().length;
