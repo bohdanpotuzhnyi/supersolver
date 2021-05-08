@@ -34,7 +34,7 @@ function simplify(arr, q){
     k = 0
     for(i = 0; i < q; i++){
         if(arr[i].pow % 2 == 0){
-            solv += `1*`
+            solv += `1\\cdot`
             ch = true
         }else{
             if(arr[i].pow > 1){
@@ -102,7 +102,7 @@ module.exports.jac_custom = (a,n) => {
         }
         if(curr_a == 1){
             //solv += `\\left(\\frac{1}{${curr_n}}\\right)
-            s_custom += `\\left(\\frac{1}{${curr_n}}\\right)${main} = 1*${prefix}${main} = `
+            s_custom += `\\left(\\frac{1}{${curr_n}}\\right)${main} = 1\\cdot${prefix}${main} = `
             factor.q -= 1
             factor.arr.shift()
             if(q = 1){
@@ -117,7 +117,7 @@ module.exports.jac_custom = (a,n) => {
         }
         if(curr_a == -1){
             pow = (curr_n - 1)/2
-            s_custom += `${prefix}\\left(\\frac{-1}{${curr_n}}\\right)${main} = (-1)^{\\frac{${curr_n} - 1}{2}}*${prefix}*${main} = (-1)^{${pow}}*${prefix}*${main} = `
+            s_custom += `${prefix}\\left(\\frac{-1}{${curr_n}}\\right)${main} = (-1)^{\\frac{${curr_n} - 1}{2}}\\cdot${prefix}\\cdot${main} = (-1)^{${pow}}\\cdot${prefix}\\cdot${main} = `
             if(pow % 2 != 0){prefix *= -1}
             s_custom += `${prefix}*${main} = `
             factor.q -= 1
@@ -138,7 +138,7 @@ module.exports.jac_custom = (a,n) => {
         }
         if(curr_a == 2){
             pow = (curr_n*curr_n - 1)/8
-            s_custom += `${prefix}\\left(\\frac{2}{${curr_n}}\\right)${main} = ${prefix}*(-1)^{\\frac{${curr_n}^2-1}{8}} ${main} = ${prefix}*(-1)^{${pow}}${main} = `
+            s_custom += `${prefix}\\left(\\frac{2}{${curr_n}}\\right)${main} = ${prefix}\\cdot(-1)^{\\frac{${curr_n}^2-1}{8}} ${main} = ${prefix}\\cdot(-1)^{${pow}}${main} = `
             if(pow % 2 != 0){prefix *= -1}
             s_custom += `${prefix}${main} = `
             //s_custom += prefix + "(-1)^" +  + "(" + curr_a + "/" + curr_n + ")" + main + " = "
