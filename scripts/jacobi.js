@@ -97,6 +97,7 @@ function simplify(arr, q){
 }
 
 module.exports.jac_custom = (a,n) => {
+    s_custom = ""
     f = true
     if (basic.gcd(a,n)>1){
         s_custom = `0 оскільки gcd(${a}, ${n}) = ${basic.gcd(a,n)}`
