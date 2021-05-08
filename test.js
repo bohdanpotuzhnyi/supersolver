@@ -14,6 +14,9 @@ bot.telegram.setWebhook("https://api.queuebot.me");
 bot.on('text', (ctx) => {
     var s = ctx.message.text;
     const ss = s.split(' ')
+    if(ss[0] == "\\help"){
+        s = "Щоб порахувати символ Якобі введіть:\nJacobi a n";
+    }
     if(ss[0] === "Jacobi" || ss[0]==="jacobi"){
         var m1=parseInt(ss[1])
         var n1=parseInt(ss[2])
