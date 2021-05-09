@@ -22,7 +22,8 @@ bot.on('text', (ctx) => {
             s = jacobi.jac_custom(m1, n1)
     }
     latex.compile(ctx.message.from.id, s)
-    ctx.reply(s)
+    ctx.replyWithPhoto({ source: `/home/queuebot/api.queuebot.me/temp/${ctx.message.from.id}/solving1.png` });
+    //ctx.reply(s)
 })
 if (clusterWorkerSize > 1) {
     if (cluster.isMaster) {
