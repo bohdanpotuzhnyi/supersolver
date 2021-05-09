@@ -22,7 +22,7 @@ bot.on('text', (ctx) => {
             s = jacobi.jac_custom(m1, n1)
     }
     latex.compile(ctx.message.from.id, s)
-    ctx.replyWithPhoto({ source: `/temp/${id}/solving1.png` });
+    ctx.replyWithPhoto({ source: `/temp/${ctx.message.from.id}/solving1.png` });
     //ctx.reply(s)
 })
 if (clusterWorkerSize > 1) {
