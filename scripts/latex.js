@@ -16,20 +16,8 @@ module.exports.compile = async (id, solving,output_scale = '1.0') => {
 };
 
 function getpreambule(){
-    s = `\\documentclass{article}
-\usepackage[a6paper]{geometry}
-\usepackage{lmodern}
-\usepackage{textcomp}
-\usepackage{lastpage}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{amssymb}
-\usepackage[T2A,T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[english,russian,ukrainian]{babel}
-\\pagenumbering{gobble}
-\\begin{document}
-$`
+    s = `\\documentclass{article}\n\usepackage[a6paper]{geometry}\n\usepackage{lmodern}\n\usepackage{textcomp}\n\usepackage{lastpage}\n\usepackage{amsmath}\n\usepackage{amsfonts}`
+    s += `\usepackage{amssymb}\n\usepackage[T2A,T1]{fontenc}\n\usepackage[utf8]{inputenc}\n\usepackage[english,russian,ukrainian]{babel}\n\\pagenumbering{gobble}\n\\begin{document}$`
     return s;
 }
 
