@@ -3,7 +3,7 @@ const os = require("os");
 const cluster = require("cluster");
 const { Telegraf } = require('telegraf');
 const jacobi = require('./scripts/jacobi.js');
-сonst latex = require('./latex.js')
+const latex = require('./scripts/latex.js')
 
 const token = '1681110137:AAEmEwDuJFK-lps4pD4uL6LKPrSE3zRtACI';
 const bot = new Telegraf(token);
@@ -21,6 +21,7 @@ bot.on('text', (ctx) => {
             var n1 = parseInt(ss[2])
             s = jacobi.jac_custom(m1, n1)
     }
+    latex.compile(ctx.message.from.id, s)
     ctx.reply(s)
 })
 if (clusterWorkerSize > 1) {
