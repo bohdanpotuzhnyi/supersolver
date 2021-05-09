@@ -14,8 +14,8 @@ module.exports.compile = async (id, solving,output_scale = '1.0') => {
         console.log('It\'s saved!');
     });
     await execAsync(`cd /temp/${id}
-    latex solution.tex
-    dvipng solution.dvi -D 300`);
+    latex solving.tex
+    dvipng solving.dvi -D 300`);
 
     //await sharp(`temp/${id}/solution.svg`, {density: 300})
     //    .toFile(`temp/${id}/solution.png`);
