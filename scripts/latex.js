@@ -3,12 +3,17 @@ const fs = require('fs')
 //const sharp = require('sharp');
 s = ""
 module.exports.compile = async (id, solving,output_scale = '1.0') => {
-    doc = getpreambule() + solving + "$\\end{document}"
-    fs.writeFile(`/home/queuebot/api.queuebot.me/temp/${id}/solving.tex`, solving, function (err) {
+    latexsolv = getpreambule() + solving + "$\\end{document}"
+    var dir = `/home/queuebot/api.queuebot.me/temp/${id}`;
+
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir);
+    }
+    fs.writeFile(`/home/queuebot/api.queuebot.me/temp/${id}/solving.tex`, latexsolv, function (err) {
         if (err) throw err;
         console.log('It\'s saved!');
     });
-    await execAsync(`cd temp/${id}
+    await execAsync(`cd /temp/${id}
     latex solution.tex
     dvipng solution.dvi -D 300`);
 
@@ -18,7 +23,7 @@ module.exports.compile = async (id, solving,output_scale = '1.0') => {
 
 function getpreambule(){
     s = `\\documentclass{article}\n\\usepackage[a6paper]{geometry}\n\\usepackage{lmodern}\n\\usepackage{textcomp}\n\\usepackage{lastpage}\n\\usepackage{amsmath}\n\\usepackage{amsfonts}`
-    s += `\\usepackage{amssymb}\n\\usepackage[T2A,T1]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian,ukrainian]{babel}\n\\pagenumbering{gobble}\n\\begin{document}$`
+    s += `\n\\usepackage{amssymb}\n\\usepackage[T2A,T1]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian,ukrainian]{babel}\n\\pagenumbering{gobble}\n\\begin{document}$`
     return s;
 }
 
