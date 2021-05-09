@@ -17,13 +17,14 @@ bot.on('text', (ctx) => {
     var ss = s.split(' ')
 
     if (ss[0].toLowerCase() === "jacobi") {
-            var m1 = parseInt(ss[1])
-            var n1 = parseInt(ss[2])
-            s = jacobi.jac_custom(m1, n1)
+        var m1 = parseInt(ss[1])
+        var n1 = parseInt(ss[2])
+        s = jacobi.jac_custom(m1, n1)
+        latex.compile(ctx.message.from.id, s)
+        ctx.replyWithPhoto({ source: `/temp/${ctx.message.from.id}/solving1.png` });
+    }else {
+        ctx.reply(s)
     }
-    latex.compile(ctx.message.from.id, s)
-    ctx.replyWithPhoto({ source: `/temp/${ctx.message.from.id}/solving1.png` });
-    //ctx.reply(s)
 })
 if (clusterWorkerSize > 1) {
     if (cluster.isMaster) {
