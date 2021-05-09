@@ -14,7 +14,9 @@ const whitelist = [
     497327654
 ];
 
-bot.telegram.setWebhook("https://api.queuebot.me");
+bot.telegram.setWebhook("https://api.queuebot.me").then(res => {
+    console.log(res ? "Webhook set successfully" : "An error occurred while setting the webhook");
+});
 
 bot.on('text', async(ctx) => {
     var s = ctx.message.text
