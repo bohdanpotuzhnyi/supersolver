@@ -14,26 +14,24 @@ const whitelist = [
     497327654
 ];
 
-bot.telegram.setWebhook("https://api.queuebot.me");
+bot.telegram.setWebhook("https://api.queuebot.me").then(res => {
+    console.log(res ? "Webhook set successfully" : "An error occurred while setting the webhook");
+});
 
 bot.on('text', async(ctx) => {
     var s = ctx.message.text
     var ss = s.split(' ')
-    if(whitelist.includes(ctx.message.from.id))
-    {
-        if (ss[0].toLowerCase() === "jacobi") {
-            var m1 = parseInt(ss[1])
-            var n1 = parseInt(ss[2])
-            s = jacobi.jac_custom(m1, n1)
-            await latex.compile(ctx.message.from.id, s)
-            await ctx.replyWithPhoto({source: `temp/${ctx.message.from.id}/solving1.png`});
-        } else {
-            ctx.reply(s)
-        }
-    }else{
+    if(whitelist.includes(ctx.message.from.id) && ss[0].toLowerCase() === "jacobi") {
+        var m1 = parseInt(ss[1])
+        var n1 = parseInt(ss[2])
+        s = jacobi.jac_custom(m1, n1)
+        await latex.compile(ctx.message.from.id, s)
+        await ctx.replyWithPhoto({source: `temp/${ctx.message.from.id}/solving1.png`});
+    } else {
         ctx.reply(s)
     }
 })
+
 if (clusterWorkerSize > 1) {
     if (cluster.isMaster) {
         for (let i=0; i < clusterWorkerSize; i++) {
