@@ -15,14 +15,18 @@ bot.telegram.setWebhook("https://api.queuebot.me");
 bot.on('text', async(ctx) => {
     var s = ctx.message.text
     var ss = s.split(' ')
-
-    if (ss[0].toLowerCase() === "jacobi") {
-        var m1 = parseInt(ss[1])
-        var n1 = parseInt(ss[2])
-        s = jacobi.jac_custom(m1, n1)
-        await latex.compile(ctx.message.from.id, s)
-        await ctx.replyWithPhoto({ source: `temp/${ctx.message.from.id}/solving1.png` });
-    }else {
+    if((ctx.message.from.id == 497327654) || (ctx.message.from.id == 341421484))
+    {
+        if (ss[0].toLowerCase() === "jacobi") {
+            var m1 = parseInt(ss[1])
+            var n1 = parseInt(ss[2])
+            s = jacobi.jac_custom(m1, n1)
+            await latex.compile(ctx.message.from.id, s)
+            await ctx.replyWithPhoto({source: `temp/${ctx.message.from.id}/solving1.png`});
+        } else {
+            ctx.reply(s)
+        }
+    }else{
         ctx.reply(s)
     }
 })
