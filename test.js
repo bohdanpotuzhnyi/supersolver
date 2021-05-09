@@ -3,6 +3,7 @@ const os = require("os");
 const cluster = require("cluster");
 const { Telegraf } = require('telegraf');
 const jacobi = require('./scripts/jacobi.js');
+сonst latex = require('./latex.js')
 
 const token = '1681110137:AAEmEwDuJFK-lps4pD4uL6LKPrSE3zRtACI';
 const bot = new Telegraf(token);
@@ -18,7 +19,6 @@ bot.on('text', (ctx) => {
     if ((ss[0] == "Jacobi") || (ss[0] == "jacobi")) {
             var m1 = parseInt(ss[1])
             var n1 = parseInt(ss[2])
-
             s = jacobi.jac_custom(m1, n1)
     }
     ctx.reply(s)

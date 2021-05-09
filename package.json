@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "shelljs": "^0.8.4",
     "http": "^0.0.1-security",
     "sharp": "^0.28.1",
     "https": "^1.0.0",
