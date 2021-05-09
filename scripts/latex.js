@@ -13,12 +13,13 @@ module.exports.compile = async (id, solving,output_scale = '1.0') => {
         if (err) throw err;
         console.log('It\'s saved!');
     });
-    await execAsync(`cd /temp/${id}
+    await execAsync(`cd /home/queuebot/api.queuebot.me/temp/${id}
     latex solving.tex
-    dvipng solving.dvi -D 300`);
+    dvipng solving.dvi -D 600`);
 
     //await sharp(`temp/${id}/solution.svg`, {density: 300})
     //    .toFile(`temp/${id}/solution.png`);
+    return `temp/${id}/solving1.png`
 };
 
 function getpreambule(){

@@ -21,8 +21,8 @@ bot.on('text', (ctx) => {
             var n1 = parseInt(ss[2])
             s = jacobi.jac_custom(m1, n1)
     }
-    latex.compile(ctx.message.from.id, s)
-    ctx.replyWithPhoto({ source: `/home/queuebot/api.queuebot.me/temp/${ctx.message.from.id}/solving1.png` });
+    loc_png = latex.compile(ctx.message.from.id, s)
+    ctx.replyWithPhoto({ source: loc_png });
     //ctx.reply(s)
 })
 if (clusterWorkerSize > 1) {
