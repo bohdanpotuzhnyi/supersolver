@@ -12,7 +12,7 @@ const clusterWorkerSize = os.cpus().length;
 
 bot.telegram.setWebhook("https://api.queuebot.me");
 
-bot.on('text', (ctx) => {
+bot.on('text', async(ctx) => {
     var s = ctx.message.text
     var ss = s.split(' ')
 
@@ -20,8 +20,8 @@ bot.on('text', (ctx) => {
         var m1 = parseInt(ss[1])
         var n1 = parseInt(ss[2])
         s = jacobi.jac_custom(m1, n1)
-        latex.compile(ctx.message.from.id, s)
-        ctx.replyWithPhoto({ source: `/temp/${ctx.message.from.id}/solving1.png` });
+        await latex.compile(ctx.message.from.id, s)
+        await ctx.replyWithPhoto({ source: `temp/${ctx.message.from.id}/solving1.png` });
     }else {
         ctx.reply(s)
     }
