@@ -1,9 +1,13 @@
 const shell = require('shelljs');
 const fs = require('fs')
-//const sharp = require('sharp');
-s = ""
+
 module.exports.compile = async (id, solving,output_scale = '1.0') => {
-    latexsolv = getpreambule()+ solving + "$\\end{document}"
+    latexsolv = `
+        ${preambule}
+        \\begin{document}
+        \$${solving}\$
+        \\end{document}
+    `;
     var dir = `/home/queuebot/api.queuebot.me/temp/${id}`;
 
     if (!fs.existsSync(dir)){
@@ -16,16 +20,22 @@ module.exports.compile = async (id, solving,output_scale = '1.0') => {
     await execAsync(`cd /home/queuebot/api.queuebot.me/temp/${id}
     latex solving.tex
     dvipng solving.dvi -D 600`);
-
-    //await sharp(`temp/${id}/solution.svg`, {density: 300})
-    //    .toFile(`temp/${id}/solution.png`);
 };
 
-function getpreambule(){
-    s = `\\documentclass{article}\n\\usepackage[a6paper]{geometry}\n\\usepackage{lmodern}\n\\usepackage{textcomp}\n\\usepackage{lastpage}\n\\usepackage{amsmath}\n\\usepackage{amsfonts}`
-    s += `\n\\usepackage{amssymb}\n\\usepackage[T2A,T1]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian,ukrainian]{babel}\n\\pagenumbering{gobble}\n\\begin{document}$`
-    return s;
-}
+const preambule = `
+    \\documentclass{article}
+    \\usepackage[T2A,T1]{fontenc}
+    \\usepackage[utf8]{inputenc}
+    \\usepackage[english,russian,ukrainian]{babel}
+    \\usepackage[a6paper]{geometry}
+    \\usepackage{lmodern}
+    \\usepackage{textcomp}
+    \\usepackage{lastpage}
+    \\usepackage{amsmath}
+    \\usepackage{amsfonts}
+    \\usepackage{amssymb}
+    \\pagenumbering{gobble}
+`;
 
 function execAsync(cmd, opts = {}) {
     return new Promise((resolve, reject) => {
