@@ -61,7 +61,7 @@ module.exports.jac_custom = (a,n) => {
     f = true
 
     if (basic.gcd(a,n)>1){
-        s_custom = `0\\,оскільки\\gcd(${a}, ${n}) = ${basic.gcd(a,n)}`
+        s_custom = `0\\;$оскільки$\\;\\gcd(${a}, ${n}) = ${basic.gcd(a,n)}`
         f = false
         return s_custom
     }
