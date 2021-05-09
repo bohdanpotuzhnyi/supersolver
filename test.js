@@ -9,13 +9,17 @@ const token = '1681110137:AAEmEwDuJFK-lps4pD4uL6LKPrSE3zRtACI';
 const bot = new Telegraf(token);
 const clusterWorkerSize = os.cpus().length;
 
+const whitelist = [
+    341421484,
+    497327654
+];
 
 bot.telegram.setWebhook("https://api.queuebot.me");
 
 bot.on('text', async(ctx) => {
     var s = ctx.message.text
     var ss = s.split(' ')
-    if((ctx.message.from.id == 497327654) || (ctx.message.from.id == 341421484))
+    if(whitelist.includes(ctx.message.from.id))
     {
         if (ss[0].toLowerCase() === "jacobi") {
             var m1 = parseInt(ss[1])
