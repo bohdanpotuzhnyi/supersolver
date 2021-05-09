@@ -1,4 +1,5 @@
 const shell = require('shelljs');
+const fs = require('fs')
 //const sharp = require('sharp');
 s = ""
 module.exports.compile = async (id, solving,output_scale = '1.0') => {
