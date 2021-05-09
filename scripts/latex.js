@@ -19,7 +19,6 @@ module.exports.compile = async (id, solving,output_scale = '1.0') => {
 
     //await sharp(`temp/${id}/solution.svg`, {density: 300})
     //    .toFile(`temp/${id}/solution.png`);
-    return `/temp/${id}/solving1.png`
 };
 
 function getpreambule(){
