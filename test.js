@@ -16,7 +16,7 @@ bot.on('text', (ctx) => {
     var s = ctx.message.text
     var ss = s.split(' ')
 
-    if ((ss[0] == "Jacobi") || (ss[0] == "jacobi")) {
+    if (ss[0].toLowerCase() === "jacobi") {
             var m1 = parseInt(ss[1])
             var n1 = parseInt(ss[2])
             s = jacobi.jac_custom(m1, n1)
