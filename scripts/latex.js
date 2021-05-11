@@ -27,7 +27,7 @@ module.exports.wts = async (id, solving) => {
         ${preambule}
         \\begin{document}
         \$${solving}`;
-    //var dir = `/home/queueboвыьалвыжвымлдt/api.queuebot.me/temp/${id}`;
+    //var dir = `/home/queueдt/api.queuebot.me/temp/${id}`;
 
     await fs.writeFile(`/home/queuebot/api.queuebot.me/temp/${id}/solving.tex`, latexsolv, function (err) {
         if (err) throw err;
