@@ -1,7 +1,12 @@
 const shell = require('shelljs');
 const fs = require('fs')
 
-module.exports.compile = async (id, solving,output_scale = '1.0') => {
+module.exports.compile = async (id) => {
+    await execAsync(`cd /home/queuebot/api.queuebot.me/temp/${id}
+    latex solving.tex
+    dvipng solving.dvi -D 600`);
+};
+module.exports.writetex = async (id, solving) => {
     latexsolv = `
         ${preambule}
         \\begin{document}
@@ -13,15 +18,11 @@ module.exports.compile = async (id, solving,output_scale = '1.0') => {
     if (!fs.existsSync(dir)){
         fs.mkdirSync(dir);
     }
-    fs.writeFile(`/home/queuebot/api.queuebot.me/temp/${id}/solving.tex`, latexsolv, function (err) {
+    await fs.writeFile(`/home/queuebot/api.queuebot.me/temp/${id}/solving.tex`, latexsolv, function (err) {
         if (err) throw err;
         console.log('It\'s saved!');
     });
-    await execAsync(`cd /home/queuebot/api.queuebot.me/temp/${id}
-    latex solving.tex
-    dvipng solving.dvi -D 600`);
-};
-
+}
 const preambule = `
     \\documentclass{article}
     \\usepackage[T2A,T1]{fontenc}
