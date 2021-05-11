@@ -1,6 +1,7 @@
 const http = require('http');
 const os = require("os");
 const cluster = require("cluster");
+const { exec } = require('child_process');
 const { Telegraf } = require('telegraf');
 const jacobi = require('./scripts/jacobi.js');
 const latex = require('./scripts/latex.js')
@@ -39,6 +40,11 @@ bot.on('text', async(ctx) => {
                 } else {
 
                 }
+                break;
+            case "lineareq":
+                await exec(`./scripts/cpp/dm/linearequation ${ss[1]} ${ss[2]} ${ss[3]} ./temp/${ctx.message.from.id}/solving.tex`);
+                await latex.compile(ctx.message.from.id)
+                await ctx.replyWithPhoto({source: `temp/${ctx.message.from.id}/solving1.png`})
                 break;
             default:
                 ctx.reply(s)
