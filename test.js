@@ -19,12 +19,20 @@ bot.telegram.setWebhook("https://api.queuebot.me");
 bot.on('text', async(ctx) => {
     var s = ctx.message.text
     var ss = s.split(' ')
-    if(whitelist.includes(ctx.message.from.id) && ss[0].toLowerCase() === "jacobi") {
-        var m1 = parseInt(ss[1])
-        var n1 = parseInt(ss[2])
-        s = jacobi.jac_custom(m1, n1)
-        await latex.compile(ctx.message.from.id, s)
-        await ctx.replyWithPhoto({source: `temp/${ctx.message.from.id}/solving1.png`});
+    if(whitelist.includes(ctx.message.from.id)){
+        switch(ss[0].toLowerCase()){
+            case "jacobi":
+                var m1 = parseInt(ss[1])
+                var n1 = parseInt(ss[2])
+                s = jacobi.jac_custom(m1, n1)
+                await latex.writetex(ctx.message.from.id, s.s)
+                await latex.compile(ctx.message.from.id)
+                await ctx.replyWithPhoto({source: `temp/${ctx.message.from.id}/solving1.png`})
+                break;
+            default:
+                ctx.reply(s)
+                break;
+        }
     } else {
         ctx.reply(s)
     }
