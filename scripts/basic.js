@@ -23,7 +23,12 @@ module.exports.ea = (n, m) => {
     }
     return {"r":r, "q":q};
 }
-
+module.exports.prime = (p) =>{
+    for (i2 = 2; i2*i2 <= p; i2++) {
+        if (p % i2 == 0) { return false; }
+    }
+    return true;
+}
 function prime(k){
     for (i2 = 2; i2*i2 <= k; i2++) {
         if (k % i2 == 0) { return false; }
