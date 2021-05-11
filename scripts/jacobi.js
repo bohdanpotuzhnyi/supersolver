@@ -33,8 +33,9 @@ function simplify(arr, q, pref){
     solv += ` = `
     k = 0
     for(i = 0; i < q; i++){
+        solv += `${pref}\\cdot`
         if(arr[i].pow % 2 == 0){
-            solv += `${pref}\\cdot`
+            solv += `1`
             ch = true
         }else{
             if(arr[i].pow > 1){
@@ -192,19 +193,26 @@ module.exports.jac_custom = (a,n) => {
                 //console.log(factortemp.arr)
                 factor_simple = simplify(factortemp.arr, factortemp.arr.length, prefix)
                 //console.log(factor_simple.arr)
-                if(factor_simple.changed){
+                if(factor_simple.arr.length>0){
+                    if(factor_simple.changed){
+                        s_custom += prefix + factor_simple.s
+                        factortemp.arr = factor_simple.arr
+                        factortemp.q = factor_simple.q
+                    }
+                    factor.q += factortemp.q
+                    factor.arr = factortemp.arr.concat(factor.arr)
+                    console.log(factor.arr)
+                    break
+                }else{
                     s_custom += prefix + factor_simple.s
-                    factortemp.arr = factor_simple.arr
-                    factortemp.q = factor_simple.q
+                    s_custom += prefix
+                    f = false;
+                    break;
                 }
-                factor.q += factortemp.q
-                factor.arr = factor.arr.concat(factortemp.arr)
-                console.log(factor.arr)
-                break
         }
     }
     }else{
-        s_custom = s_custom.substr(0,s_custom.length-8);
+        s_custom += prefix
     }
     return {"s":s_custom, "res":prefix};
 }

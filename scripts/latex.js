@@ -6,6 +6,7 @@ module.exports.compile = async (id) => {
     latex solving.tex
     dvipng solving.dvi -D 600`);
 };
+
 module.exports.writetex = async (id, solving) => {
     latexsolv = `
         ${preambule}
@@ -13,16 +14,27 @@ module.exports.writetex = async (id, solving) => {
         \$${solving}\$
         \\end{document}
     `;
-    var dir = `/home/queuebot/api.queuebot.me/temp/${id}`;
+    //var dir = `/home/queuebot/api.queuebot.me/temp/${id}`;
 
-    if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir);
-    }
     await fs.writeFile(`/home/queuebot/api.queuebot.me/temp/${id}/solving.tex`, latexsolv, function (err) {
         if (err) throw err;
         console.log('It\'s saved!');
     });
 }
+
+module.exports.wts = async (id, solving) => {
+    latexsolv = `
+        ${preambule}
+        \\begin{document}
+        \$${solving}`;
+    //var dir = `/home/queuebot/api.queuebot.me/temp/${id}`;
+
+    await fs.writeFile(`/home/queuebot/api.queuebot.me/temp/${id}/solving.tex`, latexsolv, function (err) {
+        if (err) throw err;
+        console.log('It\'s saved!');
+    });
+}
+
 const preambule = `
     \\documentclass{article}
     \\usepackage[T2A,T1]{fontenc}
