@@ -22,7 +22,7 @@ function get_main(arr, q){
     return res;
 }
 
-function simplify(arr, q){
+function simplify(arr, q, pref){
     ch = false
     solv = ""
     arr1 = []
@@ -34,7 +34,7 @@ function simplify(arr, q){
     k = 0
     for(i = 0; i < q; i++){
         if(arr[i].pow % 2 == 0){
-            solv += `1\\cdot`
+            solv += `${pref}\\cdot`
             ch = true
         }else{
             if(arr[i].pow > 1){
@@ -45,13 +45,14 @@ function simplify(arr, q){
                 k++
                 ch = true;
             }else{
-                solv += `\\left(\\frac{${arr[i].p}}{${arr[i].n}^1}\\right)^1`
+                solv += `\\left(\\frac{${arr[i].p}}{${arr[i].n}}\\right)^1`
                 temp = {"p": arr[i].p, "n": arr[i].n, "pow":1}
                 arr1.push(temp)
                 k++
             }
         }
     }
+    console.log(solv)
     solv += ` = `
     return {"arr":arr1, "q":k, "s":solv, "changed":ch}
 }
@@ -88,45 +89,24 @@ module.exports.jac_custom = (a,n) => {
     }
     prefix = 1
     while(f){
-        //factor_simple = []
-        q = factor.q
-        //console.log(s_custom)
+
+        //q = factor.q
+
         curr_a = factor.arr[0].p
         curr_n = factor.arr[0].n
 
-        //console.log(factor.arr)
-        //console.log(2 + factor.q)
+
         if(factor.arr.length > 1){
             main = get_main(factor.arr, factor.arr.length)
         }else{
             main = ``
         }
 
-        /*if(curr_a == 1){
-          //solv += `\\left(\\frac{1}{${curr_n}}\\right)
-          s_custom += `\\left(\\frac{1}{${curr_n}}\\right)${main} = 1\\cdot${prefix}${main} = `
-
-          factor.q -= 1
-          factor.arr.shift()
-          if(factor.arr.length == 0){
-            s_custom += prefix
-            f = false
-            break
-          }else{
-            curr_a = factor.arr[0].p
-            curr_n = factor.arr[0].n
-            if(factor.arr.length > 1){
-            main = get_main(factor.arr, factor.arr.length)
-            }else{
-              main = ``
-            }
-          }
-        }*/
         switch(curr_a){
             case 1:
                 //solv += `\\left(\\frac{1}{${curr_n}}\\right)
                 s_custom += `\\left(\\frac{1}{${curr_n}}\\right)${main} = 1\\cdot${prefix}${main} = `
-                factor.q -= 1
+                //factor.q -= 1
                 factor.arr.shift()
                 if(factor.arr.length == 0){
                     s_custom += prefix
@@ -174,7 +154,6 @@ module.exports.jac_custom = (a,n) => {
                 //s_custom += prefix + "(-1)^" +  + "(" + curr_a + "/" + curr_n + ")" + main + " = "
 
                 factor.arr.shift()
-                console.log("shift")
                 if(factor.arr.length == 0){
                     s_custom += prefix
                     f = false
@@ -183,7 +162,7 @@ module.exports.jac_custom = (a,n) => {
                     curr_a = factor.arr[0].p
                     curr_n = factor.arr[0].n
                     if(factor.arr.length > 1){
-                        main = get_main(factor.arr, factor.q)
+                        main = get_main(factor.arr, factor.arr.length)
                     }else{
                         main = ``
                     }
@@ -210,10 +189,10 @@ module.exports.jac_custom = (a,n) => {
                     factortemp.arr[i].n = curr_n
                 }
                 //console.log(factortemp.arr)
-                factor_simple = simplify(factortemp.arr, factortemp.q)
+                factor_simple = simplify(factortemp.arr, factortemp.arr.length, prefix)
                 //console.log(factor_simple.arr)
                 if(factor_simple.changed){
-                    solv += factor_simple.s
+                    s_custom += prefix + factor_simple.s
                     factortemp.arr = factor_simple.arr
                     factortemp.q = factor_simple.q
                 }
