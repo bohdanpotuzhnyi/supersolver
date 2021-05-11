@@ -4,6 +4,7 @@ const cluster = require("cluster");
 const { Telegraf } = require('telegraf');
 const jacobi = require('./scripts/jacobi.js');
 const latex = require('./scripts/latex.js')
+const basic = require('./scripts/basic.js')
 
 const token = '1681110137:AAEmEwDuJFK-lps4pD4uL6LKPrSE3zRtACI';
 const bot = new Telegraf(token);
@@ -28,6 +29,16 @@ bot.on('text', async(ctx) => {
                 await latex.writetex(ctx.message.from.id, s.s)
                 await latex.compile(ctx.message.from.id)
                 await ctx.replyWithPhoto({source: `temp/${ctx.message.from.id}/solving1.png`})
+                break;
+            case "rootmod":
+                ctx.reply("rootmod")
+                var a = parseInt(ss[1])
+                var p = parseInt(ss[2])
+                if(basic.prime(p)){
+
+                } else {
+
+                }
                 break;
             default:
                 ctx.reply(s)
