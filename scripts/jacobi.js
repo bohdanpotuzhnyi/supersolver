@@ -64,7 +64,7 @@ module.exports.jac_custom = (a,n) => {
     if (basic.gcd(a,n)>1){
         s_custom = `0\\;$оскільки$\\;\\gcd(${a}, ${n}) = ${basic.gcd(a,n)}`
         f = false
-        return s_custom
+        return {"s":s_custom, "res":0}
     }
     curr_a = a
     curr_n = n
@@ -85,7 +85,7 @@ module.exports.jac_custom = (a,n) => {
         }
     }else{
         s_custom += `1`;
-        return s_custom;
+        return {"s":s_custom, "res":0}
     }
     prefix = 1
     while(f){
