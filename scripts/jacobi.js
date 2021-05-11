@@ -77,7 +77,7 @@ module.exports.jac_custom = (a,n) => {
         for(i = 0; i < factor.q; i++){
             factor.arr[i].n = curr_n;
         }
-        factor_simple = simplify(factor.arr, factor.q)
+        factor_simple = simplify(factor.arr, factor.arr.length, 1)
         if(factor_simple.changed){
             s_custom += factor_simple.s
             factor.arr = factor_simple.arr
@@ -88,6 +88,7 @@ module.exports.jac_custom = (a,n) => {
         return {"s":s_custom, "res":0}
     }
     prefix = 1
+    if(factor.arr.length > 0){
     while(f){
 
         //q = factor.q
@@ -201,6 +202,9 @@ module.exports.jac_custom = (a,n) => {
                 console.log(factor.arr)
                 break
         }
+    }
+    }else{
+        s_custom = s_custom.substr(0,s_custom.length-8);
     }
     return {"s":s_custom, "res":prefix};
 }
