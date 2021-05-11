@@ -62,15 +62,17 @@ module.exports.jac_custom = (a,n) => {
     s_custom = ""
     f = true
 
+    s_custom = basic.display_ea(a,n) + "\\\\";
+
     if (basic.gcd(a,n)>1){
-        s_custom = `0\\;$оскільки$\\;\\gcd(${a}, ${n}) = ${basic.gcd(a,n)}`
+        s_custom += `0\\;$оскільки$\\;\\gcd(${a}, ${n}) = ${basic.gcd(a,n)}`
         f = false
         return {"s":s_custom, "res":0}
     }
     curr_a = a
     curr_n = n
 
-    s_custom = `\\left ( \\frac{${a}}{${n}} \\right ) = `
+    s_custom += `\\left ( \\frac{${a}}{${n}} \\right ) = `
 
     if(a != 1){
         factor = basic.factor(a);

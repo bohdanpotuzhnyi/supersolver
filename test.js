@@ -38,6 +38,16 @@ bot.on('text', async(ctx) => {
     var ss = s.split(' ')
     if(whitelist.includes(id)){
         switch(ss[0].toLowerCase()){
+            case "gcd":
+                var m1 = parseInt(ss[1])
+                var n1 = parseInt(ss[2])
+                if((m1 > 0) && (n1 > 0)) {
+                    s = basic.display_ea(m1, n1)
+                    await latex.writetex(id, s)
+                    await latex.compile(id);
+                    await ctx.replyWithPhoto({source: `temp/${ctx.message.from.id}/solving1.png`})
+                }else ctx.reply("Введи нормальні числа")
+                break;
             case "jacobi":
                 var m1 = parseInt(ss[1])
                 var n1 = parseInt(ss[2])

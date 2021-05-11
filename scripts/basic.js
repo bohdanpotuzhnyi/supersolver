@@ -1,3 +1,4 @@
+const basic = require('./basic.js')
 module.exports.gcd = (a,b) => {
     r_2 = 0, r_1 = a, r_ = b;
     while (r_ != 0) {
@@ -11,7 +12,7 @@ module.exports.gcd = (a,b) => {
 module.exports.ea = (n, m) => {
     r = []
     q = []
-    r_2, r_1 = a, r_ = b
+    r_2=0, r_1 = n, r_ = m
     r.push(r_1)
     r.push(r_)
     while (r_ != 0) {
@@ -23,6 +24,31 @@ module.exports.ea = (n, m) => {
     }
     return {"r":r, "q":q};
 }
+
+module.exports.display_ea = (n,m) => {
+    res = basic.ea(n,m)
+    q = res.q;
+    r = res.r;
+    s = `\\gcd(${n},${m}) = ${basic.gcd(n,m)}\\\\`
+    k = 0;
+    k++
+    r_1 = r[k];
+    k++
+    r_ = r[k];
+    q_k = 0;
+
+    while (k < r.length-1) {
+        r_2 = r_1;
+        r_1 = r_;
+        k++
+        r_ = r[k];
+        q_k++
+        q_ = q[q_k];
+        s += r_2 + " = " + r_1 + " \\cdot " + q_ + " + " + r_ + " \\\\"
+    }
+    return s;
+}
+
 module.exports.prime = (p) =>{
     for (i2 = 2; i2*i2 <= p; i2++) {
         if (p % i2 == 0) { return false; }
