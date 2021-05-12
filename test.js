@@ -43,7 +43,7 @@ bot.help((ctx) => {
     ctx.reply(getMessage('help.txt'));
 });
 
-bot.command(['lineareq', 'jacobi', 'rootmod', 'cancel'], (ctx) => {
+bot.command(['gcd', 'lineareq', 'jacobi', 'rootmod', 'cancel'], (ctx) => {
     const id = ctx.message.from.id, command = ctx.message.text.split(' ')[0].substring(1);
     let user = JSON.parse(fs.readFileSync(`users/${id}.json`).toString());
     if (command === 'cancel') {
@@ -61,6 +61,9 @@ bot.on('text', (ctx) => {
     const id = ctx.message.from.id;
     const user = JSON.parse(fs.readFileSync(`users/${id}.json`).toString());
     switch (user.state) {
+        case 'gcd':
+            gcd_problem(ctx);
+            break;
         case 'lineareq':
             lineareq_problem(ctx);
             break;
@@ -76,6 +79,10 @@ bot.on('text', (ctx) => {
     user.state = null;
     fs.writeFileSync(`users/${id}.json`, JSON.stringify(user));
 });
+
+function gcd_problem(ctx) {
+    ctx.reply('gcd is in development');
+}
 
 function lineareq_problem(ctx) {
     ctx.reply('lineareq is in development');
