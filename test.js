@@ -38,10 +38,16 @@ bot.on('text', async(ctx) => {
     var ss = s.split(' ')
     if(whitelist.includes(id)){
         switch(ss[0].toLowerCase()){
+            case "/help":
+                ctx.reply("Введіть:\n\njacobi 10 121 для розрахунку символа Якобі\n\ngcd 3 5 для розрахунку Gcd()\n\nrootmod 17 43 для розрахунку x^2 = a (mod p)\n\nlineareq 321 205 550 для розрахунку 321x = 205 (mod 550)")
+                break
+            case "/start":
+                ctx.reply("Введіть:\n\njacobi 10 121 для розрахунку символа Якобі\n\ngcd 3 5 для розрахунку Gcd()\n\nrootmod 17 43 для розрахунку x^2 = a (mod p)\n\nlineareq 321 205 550 для розрахунку 321x = 205 (mod 550)")
+                break
             case "gcd":
                 var m1 = parseInt(ss[1])
                 var n1 = parseInt(ss[2])
-                if((m1 > 0) && (n1 > 0)) {
+                if((m1 > 1) && (n1 > 1)) {
                     s = basic.display_ea(m1, n1)
                     await latex.writetex(id, s)
                     await latex.compile(id);
@@ -51,7 +57,7 @@ bot.on('text', async(ctx) => {
             case "jacobi":
                 var m1 = parseInt(ss[1])
                 var n1 = parseInt(ss[2])
-                if((m1 > 0) && (n1 > 0) && (n1 % 2 != 0)) {
+                if((m1 > 1) && (n1 > 2) && (n1 % 2 != 0)) {
                     s = jacobi.jac_custom(m1, n1)
                     await latex.writetex(id, s.s)
                     await latex.compile(id);
@@ -63,7 +69,7 @@ bot.on('text', async(ctx) => {
                 //ctx.reply("rootmod")
                 var a = parseInt(ss[1])
                 var p = parseInt(ss[2])
-                if((a > 0) && (p > 0)){
+                if((a > 0) && (p > 2)){
                     if(basic.prime(p)){
                         jacs = jacobi.jac_custom(a, p)
                         //latex.wts(ctx.message.from.id, jacs.s)
@@ -77,7 +83,7 @@ bot.on('text', async(ctx) => {
 
                     } else ctx.reply(`${p}-не просте`)
                 }else{
-                    ctx.reply("Введи нормальні числа")
+                    ctx.reply("Введіть p - більше за 2")
                 }
                 break;
             case "lineareq":
@@ -92,7 +98,42 @@ bot.on('text', async(ctx) => {
                 break;
         }
     } else {
-        ctx.reply(s)
+        switch(ss[0].toLowerCase()) {
+            case "/help":
+                ctx.reply("Введіть:\n\njacobi 10 121 для розрахунку символа Якобі\n\ngcd 3 5 для розрахунку Gcd()\n\nrootmod 17 43 для розрахунку x^2 = a (mod p)\n\nlineareq 321 205 550 для розрахунку 321x = 205 (mod 550)")
+                break
+            case "/start":
+                ctx.reply("Введіть:\n\njacobi 10 121 для розрахунку символа Якобі\n\ngcd 3 5 для розрахунку Gcd()\n\nrootmod 17 43 для розрахунку x^2 = a (mod p)\n\nlineareq 321 205 550 для розрахунку 321x = 205 (mod 550)")
+                break
+            case "rootmod":
+                var a = parseInt(ss[1])
+                var p = parseInt(ss[2])
+                if ((a > 0) && (p > 2)) {
+                    ctx.reply("rootmod")
+                } else ctx.reply("Введи нормальні числа")
+                break;
+            case "gcd":
+                var m1 = parseInt(ss[1])
+                var n1 = parseInt(ss[2])
+                if ((m1 > 0) && (n1 > 0)) {
+                    ctx.reply("gcd")
+                } else {
+                    "Введи нормальні числа"
+                }
+                break
+            case "jacobi":
+                var m1 = parseInt(ss[1])
+                var n1 = parseInt(ss[2])
+                if ((m1 > 0) && (n1 > 1) && (n1 % 2 != 0)) {
+                    ctx.reply("jacobi")
+                } else ctx.reply("Введи нормальні числа")
+            case "lineraeq":
+                ctx.reply("lineareq")
+                break
+            default:
+                ctx.reply(s)
+                break
+        }
     }
 })
 
