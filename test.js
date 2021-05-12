@@ -35,6 +35,26 @@ bot.help((ctx) => {
     ctx.reply(getMessage('help.txt'));
 });
 
+bot.command(['lineareq', 'jacobi', 'rootmod', 'cancel'], (ctx) => {
+    const id = ctx.message.from.id, command = ctx.message.text.split(' ')[0].substring(1);
+    let user;
+    if (fs.existsSync(`users/${id}.json`)) {
+        user = JSON.parse(fs.readFileSync(`users/${id}.json`).toString());
+    }
+    else {
+        user = {state: null};
+    }
+    if (command === 'cancel') {
+        user.state = null;
+        ctx.reply(getMessage('cancel.txt'));
+    }
+    else {
+        user.state = command;
+        ctx.reply(getMessage(`problems/${command}.txt`));
+    }
+    fs.writeFileSync(`users/${id}.json`, JSON.stringify(user));
+});
+
 bot.on('text', async(ctx) => {
 
     var dir = `/home/queuebot/api.queuebot.me/temp/${ctx.message.from.id}`;
