@@ -27,6 +27,14 @@ function getMessage(path) {
     return fs.readFileSync(`messages/${path}`, 'utf8');
 }
 
+bot.on('message',(ctx,next) => {
+    const id = ctx.message.from.id;
+    if (!fs.existsSync(`users/${id}.json`)) {
+        fs.writeFileSync(`users/${id}.json`, JSON.stringify({state:null}));
+    }
+    return next();
+});
+
 bot.start((ctx) => {
     ctx.reply(getMessage('start.txt'));
 });
@@ -37,13 +45,7 @@ bot.help((ctx) => {
 
 bot.command(['lineareq', 'jacobi', 'rootmod', 'cancel'], (ctx) => {
     const id = ctx.message.from.id, command = ctx.message.text.split(' ')[0].substring(1);
-    let user;
-    if (fs.existsSync(`users/${id}.json`)) {
-        user = JSON.parse(fs.readFileSync(`users/${id}.json`).toString());
-    }
-    else {
-        user = {state: null};
-    }
+    let user = JSON.parse(fs.readFileSync(`users/${id}.json`).toString());
     if (command === 'cancel') {
         user.state = null;
         ctx.reply(getMessage('cancel.txt'));
