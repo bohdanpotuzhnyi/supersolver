@@ -121,8 +121,34 @@ async function lineareq_problem(ctx) {
     }
 }
 
-function jacobi_problem(ctx) {
-    ctx.reply('jacobi is in development');
+async function jacobi_problem(ctx) {
+    const id = ctx.message.from.id;
+    if (!fs.existsSync(`temp/${id}`))
+        await fs.promises.mkdir(`temp/${id}`);
+    try {
+        const split = ctx.message.text.split(' ');
+        const m1 = parseInt(split[0]);
+        const n1 = parseInt(split[1]);
+        if((m1 > 1) && (n1 > 2) && (n1 % 2 !== 0)) {
+            const s = jacobi.jac_custom(m1, n1);
+            await latex.writetex(id, s.s)
+            await latex.compile(id);
+
+            const images = [];
+            for (let i = 1; fs.existsSync(`temp/${id}/solving${i}.png`); ++i) {
+                images.push({
+                    media: { source: `temp/${id}/solving${i}.png` },
+                    type: 'photo'
+                });
+            }
+            await ctx.replyWithMediaGroup(images);
+        }else ctx.reply("Введи нормальні числа")
+    } catch (error) {
+        ctx.reply(error.toString());
+        console.error(error);
+    } finally {
+        await fs.promises.rm(`temp/${id}`, {recursive: true});
+    }
 }
 
 function rootmod_problem(ctx) {
