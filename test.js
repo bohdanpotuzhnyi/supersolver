@@ -118,18 +118,23 @@ async function lineareq_problem(ctx) {
         await fs.promises.mkdir(`temp/${id}`);
     try {
         const split = ctx.message.text.split(' ');
-        await execute(`./scripts/cpp/dm/linearequation ${split[0]} ${split[1]} ${split[2]} temp/${id}/solution.tex`);
-        await execute(`latex solution.tex`, {cwd: `temp/${id}`});
-        await execute(`dvipng solution.dvi -D 600`, {cwd: `temp/${id}`});
+        if (split[2] > 0) {
+            await execute(`./scripts/cpp/dm/linearequation ${split[0]} ${split[1]} ${split[2]} temp/${id}/solution.tex`);
+            await execute(`latex solution.tex`, {cwd: `temp/${id}`});
+            await execute(`dvipng solution.dvi -D 600`, {cwd: `temp/${id}`});
 
-        const images = [];
-        for (let i = 1; fs.existsSync(`temp/${id}/solution${i}.png`); ++i) {
-            images.push({
-                media: { source: `temp/${id}/solution${i}.png` },
-                type: 'photo'
-            });
+            const images = [];
+            for (let i = 1; fs.existsSync(`temp/${id}/solution${i}.png`); ++i) {
+                images.push({
+                    media: { source: `temp/${id}/solution${i}.png` },
+                    type: 'photo'
+                });
+            }
+            await ctx.replyWithMediaGroup(images);
         }
-        await ctx.replyWithMediaGroup(images);
+        else {
+            ctx.reply('n должно быть > 0');
+        }
     } catch (error) {
         ctx.reply(error.toString());
         console.error(error);
