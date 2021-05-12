@@ -91,8 +91,34 @@ function execute(cmd, opts={}) {
     });
 }
 
-function gcd_problem(ctx) {
-    ctx.reply('gcd is in development');
+async function gcd_problem(ctx) {
+    const id = ctx.message.from.id;
+    if (!fs.existsSync(`temp/${id}`))
+        await fs.promises.mkdir(`temp/${id}`);
+    try {
+        const split = ctx.message.text.split(' ');
+        const m1 = parseInt(split[0]);
+        const n1 = parseInt(split[1]);
+        if((m1 > 1) && (n1 > 1)) {
+            let s = basic.display_ea(m1, n1);
+            await latex.writetex(id, s);
+            await latex.compile(id);
+
+            const images = [];
+            for (let i = 1; fs.existsSync(`temp/${id}/solving${i}.png`); ++i) {
+                images.push({
+                    media: { source: `temp/${id}/solving${i}.png` },
+                    type: 'photo'
+                });
+            }
+            await ctx.replyWithMediaGroup(images);
+        }else ctx.reply("Введи нормальні числа");
+    } catch (error) {
+        ctx.reply(error.toString());
+        console.error(error);
+    } finally {
+        await fs.promises.rm(`temp/${id}`, {recursive: true});
+    }
 }
 
 async function lineareq_problem(ctx) {
