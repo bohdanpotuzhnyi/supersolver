@@ -80,10 +80,6 @@ bot.on('text', (ctx) => {
     fs.writeFileSync(`users/${id}.json`, JSON.stringify(user));
 });
 
-function gcd_problem(ctx) {
-    ctx.reply('gcd is in development');
-}
-
 function execute(cmd, opts={}) {
     return new Promise((resolve, reject) => {
         exec(cmd, opts, (error, stdout) => {
@@ -93,6 +89,10 @@ function execute(cmd, opts={}) {
             resolve(stdout);
         });
     });
+}
+
+function gcd_problem(ctx) {
+    ctx.reply('gcd is in development');
 }
 
 async function lineareq_problem(ctx) {
