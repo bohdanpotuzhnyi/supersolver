@@ -84,8 +84,41 @@ function gcd_problem(ctx) {
     ctx.reply('gcd is in development');
 }
 
-function lineareq_problem(ctx) {
-    ctx.reply('lineareq is in development');
+function execute(cmd, opts={}) {
+    return new Promise((resolve, reject) => {
+        exec(cmd, opts, (error, stdout) => {
+            if (error) {
+                reject(error.message);
+            }
+            resolve(stdout);
+        });
+    });
+}
+
+async function lineareq_problem(ctx) {
+    const id = ctx.message.from.id;
+    if (!fs.existsSync(`temp/${id}`))
+        await fs.promises.mkdir(`temp/${id}`);
+    try {
+        const split = ctx.message.text.split(' ');
+        await execute(`./scripts/cpp/dm/linearequation ${split[0]} ${split[1]} ${split[2]} temp/${id}/solution.tex`);
+        await execute(`latex solution.tex`, {cwd: `temp/${id}`});
+        await execute(`dvipng solution.dvi -D 600`, {cwd: `temp/${id}`});
+
+        const images = [];
+        for (let i = 1; fs.existsSync(`temp/${id}/solution${i}.png`); ++i) {
+            images.push({
+                media: { source: `temp/${id}/solution${i}.png` },
+                type: 'photo'
+            });
+        }
+        await ctx.replyWithMediaGroup(images);
+    } catch (error) {
+        ctx.reply(error.toString());
+        console.error(error);
+    } finally {
+        await fs.promises.rm(`temp/${id}`, {recursive: true});
+    }
 }
 
 function jacobi_problem(ctx) {
