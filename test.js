@@ -48,21 +48,21 @@ bot.command(['gcd', 'lineareq', 'jacobi', 'rootmod', 'cancel'], (ctx) => {
     fs.writeFileSync(`users/${id}.json`, JSON.stringify(user));
 });
 
-bot.on('text', (ctx) => {
+bot.on('text', async (ctx) => {
     const id = ctx.message.from.id;
     const user = JSON.parse(fs.readFileSync(`users/${id}.json`).toString());
     switch (user.state) {
         case 'gcd':
-            gcd_problem(ctx);
+            await gcd_problem(ctx);
             break;
         case 'lineareq':
-            lineareq_problem(ctx);
+            await lineareq_problem(ctx);
             break;
         case 'jacobi':
-            jacobi_problem(ctx);
+            await jacobi_problem(ctx);
             break;
         case 'rootmod':
-            rootmod_problem(ctx);
+            await rootmod_problem(ctx);
             break;
         default:
             ctx.reply(getMessage('help.txt'));
