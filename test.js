@@ -48,21 +48,21 @@ bot.command(['gcd', 'lineareq', 'jacobi', 'rootmod', 'cancel'], (ctx) => {
     fs.writeFileSync(`users/${id}.json`, JSON.stringify(user));
 });
 
-bot.on('text', (ctx) => {
+bot.on('text', async (ctx) => {
     const id = ctx.message.from.id;
     const user = JSON.parse(fs.readFileSync(`users/${id}.json`).toString());
     switch (user.state) {
         case 'gcd':
-            gcd_problem(ctx);
+            await gcd_problem(ctx);
             break;
         case 'lineareq':
-            lineareq_problem(ctx);
+            await lineareq_problem(ctx);
             break;
         case 'jacobi':
-            jacobi_problem(ctx);
+            await jacobi_problem(ctx);
             break;
         case 'rootmod':
-            rootmod_problem(ctx);
+            await rootmod_problem(ctx);
             break;
         default:
             ctx.reply(getMessage('help.txt'));
@@ -118,18 +118,23 @@ async function lineareq_problem(ctx) {
         await fs.promises.mkdir(`temp/${id}`);
     try {
         const split = ctx.message.text.split(' ');
-        await execute(`./scripts/cpp/dm/linearequation ${split[0]} ${split[1]} ${split[2]} temp/${id}/solution.tex`);
-        await execute(`latex solution.tex`, {cwd: `temp/${id}`});
-        await execute(`dvipng solution.dvi -D 600`, {cwd: `temp/${id}`});
+        if (split[2] > 0) {
+            await execute(`./scripts/cpp/dm/linearequation ${split[0]} ${split[1]} ${split[2]} temp/${id}/solution.tex`);
+            await execute(`latex solution.tex`, {cwd: `temp/${id}`});
+            await execute(`dvipng solution.dvi -D 600`, {cwd: `temp/${id}`});
 
-        const images = [];
-        for (let i = 1; fs.existsSync(`temp/${id}/solution${i}.png`); ++i) {
-            images.push({
-                media: { source: `temp/${id}/solution${i}.png` },
-                type: 'photo'
-            });
+            const images = [];
+            for (let i = 1; fs.existsSync(`temp/${id}/solution${i}.png`); ++i) {
+                images.push({
+                    media: { source: `temp/${id}/solution${i}.png` },
+                    type: 'photo'
+                });
+            }
+            await ctx.replyWithMediaGroup(images);
         }
-        await ctx.replyWithMediaGroup(images);
+        else {
+            ctx.reply('n должно быть > 0');
+        }
     } catch (error) {
         ctx.reply(error.toString());
         console.error(error);
