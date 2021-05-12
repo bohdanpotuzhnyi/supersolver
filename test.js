@@ -57,6 +57,38 @@ bot.command(['lineareq', 'jacobi', 'rootmod', 'cancel'], (ctx) => {
     fs.writeFileSync(`users/${id}.json`, JSON.stringify(user));
 });
 
+bot.on('text', (ctx) => {
+    const id = ctx.message.from.id;
+    const user = JSON.parse(fs.readFileSync(`users/${id}.json`).toString());
+    switch (user.state) {
+        case 'lineareq':
+            lineareq_problem(ctx);
+            break;
+        case 'jacobi':
+            jacobi_problem(ctx);
+            break;
+        case 'rootmod':
+            rootmod_problem(ctx);
+            break;
+        default:
+            ctx.reply(getMessage('help.txt'));
+    }
+    user.state = null;
+    fs.writeFileSync(`users/${id}.json`, JSON.stringify(user));
+});
+
+function lineareq_problem(ctx) {
+    ctx.reply('lineareq is in development');
+}
+
+function jacobi_problem(ctx) {
+    ctx.reply('jacobi is in development');
+}
+
+function rootmod_problem(ctx) {
+    ctx.reply('rootmod is in development');
+}
+
 bot.on('text', async(ctx) => {
 
     var dir = `/home/queuebot/api.queuebot.me/temp/${ctx.message.from.id}`;
