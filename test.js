@@ -23,6 +23,18 @@ var images = [];
 
 bot.telegram.setWebhook("https://api.queuebot.me");
 
+function getMessage(path) {
+    return fs.readFileSync(`messages/${path}`, 'utf8');
+}
+
+bot.start((ctx) => {
+    ctx.reply(getMessage('start.txt'));
+});
+
+bot.help((ctx) => {
+    ctx.reply(getMessage('help.txt'));
+});
+
 bot.on('text', async(ctx) => {
 
     var dir = `/home/queuebot/api.queuebot.me/temp/${ctx.message.from.id}`;
@@ -38,12 +50,6 @@ bot.on('text', async(ctx) => {
     var ss = s.split(' ')
     if(whitelist.includes(id)){
         switch(ss[0].toLowerCase()){
-            case "/help":
-                ctx.reply("Введіть:\n\njacobi 10 121 для розрахунку символа Якобі\n\ngcd 3 5 для розрахунку Gcd()\n\nrootmod 17 43 для розрахунку x^2 = a (mod p)\n\nlineareq 321 205 550 для розрахунку 321x = 205 (mod 550)")
-                break
-            case "/start":
-                ctx.reply("Введіть:\n\njacobi 10 121 для розрахунку символа Якобі\n\ngcd 3 5 для розрахунку Gcd()\n\nrootmod 17 43 для розрахунку x^2 = a (mod p)\n\nlineareq 321 205 550 для розрахунку 321x = 205 (mod 550)")
-                break
             case "gcd":
                 var m1 = parseInt(ss[1])
                 var n1 = parseInt(ss[2])
@@ -100,10 +106,6 @@ bot.on('text', async(ctx) => {
     } else {
         switch(ss[0].toLowerCase()) {
             case "/help":
-                ctx.reply("Введіть:\n\njacobi 10 121 для розрахунку символа Якобі\n\ngcd 3 5 для розрахунку Gcd()\n\nrootmod 17 43 для розрахунку x^2 = a (mod p)\n\nlineareq 321 205 550 для розрахунку 321x = 205 (mod 550)")
-                break
-            case "/start":
-                ctx.reply("Введіть:\n\njacobi 10 121 для розрахунку символа Якобі\n\ngcd 3 5 для розрахунку Gcd()\n\nrootmod 17 43 для розрахунку x^2 = a (mod p)\n\nlineareq 321 205 550 для розрахунку 321x = 205 (mod 550)")
                 break
             case "rootmod":
                 var a = parseInt(ss[1])
