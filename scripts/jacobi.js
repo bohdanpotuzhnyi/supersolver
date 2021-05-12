@@ -30,12 +30,12 @@ function simplify(arr, q, pref){
         //`\\left(\\frac{${arr[i].p}}${{arr[i].n}^{${arr[i].pow}}}\\right)`
         solv += `\\left(\\frac{${arr[i].p}}{${arr[i].n}}\\right)^{${arr[i].pow}}`
     }
-    solv += ` = `
+    solv += `\\overset{3,4}{=}`
     k = 0
     for(i = 0; i < q; i++){
         solv += `${pref}\\cdot`
         if(arr[i].pow % 2 == 0){
-            solv += `1`
+            //solv += `1`
             ch = true
         }else{
             if(arr[i].pow > 1){
@@ -59,10 +59,16 @@ function simplify(arr, q, pref){
 }
 
 module.exports.jac_custom = (a,n) => {
-    s_custom = ""
+    s_custom = `\\left (\\frac{${a}}{${n}} \\right )?\\\\\\\\
+1)\\left (\\frac{1}{n} \\right ) = 1\\\\\\\\
+2)\\left (\\frac{2}{n} \\right ) = (-1)^{\\frac{n^2-1}{8}}\\\\\\\\
+3)\\left (\\frac{a}{n} \\right )^2 = 1\\\\\\\\
+4)\\left (\\frac{a}{n} \\right )^k = \\left (\\frac{a}{n} \\right )^1, k=2n+1, n \\in N_{0} \\\\\\\\
+5)\\left (\\frac{ab}{n} \\right ) = \\left (\\frac{a}{n} \\right ) \\left (\\frac{b}{n} \\right)\\\\\\\\
+6)\\left (\\frac{a}{n} \\right ) = (-1)^{\\frac{a-1}{2}\\frac{n-1}{2}} \\left (\\frac{n}{a} \\right )\\\\\\\\`;
     f = true
 
-    s_custom = basic.display_ea(a,n) + "\\\\";
+    s_custom += basic.display_ea(a,n) + "\\\\";
 
     if (basic.gcd(a,n)>1){
         s_custom += `0\\;$оскільки$\\;\\gcd(${a}, ${n}) = ${basic.gcd(a,n)}`
@@ -81,7 +87,9 @@ module.exports.jac_custom = (a,n) => {
             factor.arr[i].n = curr_n;
         }
         factor_simple = simplify(factor.arr, factor.arr.length, 1)
-        if(factor_simple.changed){
+        if(factor_simple.changed) {
+            s_custom = s_custom.substring(0, s_custom.length - 2);
+            s_custom += "\\overset{5}{=}"
             s_custom += factor_simple.s
             factor.arr = factor_simple.arr
             factor.q = factor_simple.q
@@ -109,7 +117,7 @@ module.exports.jac_custom = (a,n) => {
         switch(curr_a){
             case 1:
                 //solv += `\\left(\\frac{1}{${curr_n}}\\right)
-                s_custom += `\\left(\\frac{1}{${curr_n}}\\right)${main} = 1\\cdot${prefix}${main} = `
+                s_custom += `\\left(\\frac{1}{${curr_n}}\\right)${main} \\overset{1}{=} 1\\cdot${prefix}${main} = `
                 //factor.q -= 1
                 factor.arr.shift()
                 if(factor.arr.length == 0){
@@ -152,7 +160,7 @@ module.exports.jac_custom = (a,n) => {
 
             case 2:
                 pow = (curr_n*curr_n - 1)/8
-                s_custom += `${prefix}\\left(\\frac{2}{${curr_n}}\\right)${main} = ${prefix}\\cdot(-1)^{\\frac{${curr_n}^2-1}{8}} ${main} = ${prefix}\\cdot(-1)^{${pow}}${main} = `
+                s_custom += `${prefix}\\left(\\frac{2}{${curr_n}}\\right)${main} \\overset{2}{=} ${prefix}\\cdot(-1)^{\\frac{${curr_n}^2-1}{8}} ${main} = ${prefix}\\cdot(-1)^{${pow}}${main} = `
                 if(pow % 2 != 0){prefix *= -1}
                 s_custom += `${prefix}${main} = `
                 //s_custom += prefix + "(-1)^" +  + "(" + curr_a + "/" + curr_n + ")" + main + " = "
@@ -176,6 +184,8 @@ module.exports.jac_custom = (a,n) => {
             default:
                 pow = ((curr_a-1)*(curr_n-1))/4
                 //\\left(\\frac{${curr_n % curr_a}}{${curr_a}}\\right)
+                s_custom = s_custom.substring(0, s_custom.length-2);
+                s_custom += `\\overset{6}{=}`
                 s_custom +=` ${prefix}(-1)^{\\frac{${curr_a}-1}{2}\\frac{${curr_n}-1}{2}}\\left(\\frac{${curr_n}}{${curr_a}}\\right)${main} = ${prefix}(-1)^{${pow}}\\left(\\frac{${curr_n % curr_a}}{${curr_a}}\\right)${main} = `
                 if (pow % 2 != 0) prefix *= -1
 
@@ -197,6 +207,8 @@ module.exports.jac_custom = (a,n) => {
                 //console.log(factor_simple.arr)
                 if(factor_simple.arr.length>0){
                     if(factor_simple.changed){
+                        s_custom = s_custom.substring(0, s_custom.length-2);
+                        s_custom += "\\overset{5}{=}"
                         s_custom += prefix + factor_simple.s
                         factortemp.arr = factor_simple.arr
                         factortemp.q = factor_simple.q
