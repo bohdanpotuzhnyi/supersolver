@@ -151,8 +151,41 @@ async function jacobi_problem(ctx) {
     }
 }
 
-function rootmod_problem(ctx) {
-    ctx.reply('rootmod is in development');
+async function rootmod_problem(ctx) {
+    const id = ctx.message.from.id;
+    if (!fs.existsSync(`temp/${id}`))
+        await fs.promises.mkdir(`temp/${id}`);
+    try {
+        const split = ctx.message.text.split(' ');
+        const a = parseInt(split[0]);
+        const p = parseInt(split[1]);
+        if((a > 0) && (p > 2)){
+            if(basic.prime(p)){
+                const jacs = jacobi.jac_custom(a, p)
+                await exec(`/home/queuebot/api.queuebot.me/scripts/cpp/dm/rootmod ${jacs.res} ${a} ${p} /home/queuebot/api.queuebot.me/temp/${id}/solving1.tex`);
+                const data = fs.readFileSync(`/home/queuebot/api.queuebot.me/temp/${id}/solving1.tex`, 'utf8');
+                jacs.s += data;
+                await latex.wts(ctx.message.from.id, jacs.s)
+                await latex.compile(id);
+
+                const images = [];
+                for (let i = 1; fs.existsSync(`temp/${id}/solving${i}.png`); ++i) {
+                    images.push({
+                        media: { source: `temp/${id}/solving${i}.png` },
+                        type: 'photo'
+                    });
+                }
+                await ctx.replyWithMediaGroup(images);
+            } else ctx.reply(`${p}-не просте`)
+        }else{
+            ctx.reply("Введіть p - більше за 2")
+        }
+    } catch (error) {
+        ctx.reply(error.toString());
+        console.error(error);
+    } finally {
+        await fs.promises.rm(`temp/${id}`, {recursive: true});
+    }
 }
 
 bot.on('text', async(ctx) => {
