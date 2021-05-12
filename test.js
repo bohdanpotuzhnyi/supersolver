@@ -34,7 +34,7 @@ bot.help((ctx) => {
     ctx.reply(getMessage('help.txt'));
 });
 
-bot.command(['gcd', 'lineareq', 'jacobi', 'rootmod', 'cancel'], (ctx) => {
+bot.command(['gcd', 'lineareq', 'poleq', 'jacobi', 'rootmod', 'cancel'], (ctx) => {
     const id = ctx.message.from.id, command = ctx.message.text.split(' ')[0].substring(1);
     let user = JSON.parse(fs.readFileSync(`users/${id}.json`).toString());
     if (command === 'cancel') {
@@ -57,6 +57,9 @@ bot.on('text', async (ctx) => {
             break;
         case 'lineareq':
             await lineareq_problem(ctx);
+            break;
+        case 'poleq':
+            await poleq_problem(ctx);
             break;
         case 'jacobi':
             await jacobi_problem(ctx);
@@ -141,6 +144,10 @@ async function lineareq_problem(ctx) {
     } finally {
         await fs.promises.rm(`temp/${id}`, {recursive: true});
     }
+}
+
+function poleq_problem(ctx) {
+    ctx.reply('poleq is in development');
 }
 
 async function jacobi_problem(ctx) {
