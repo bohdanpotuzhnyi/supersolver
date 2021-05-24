@@ -7,6 +7,7 @@ const jacobi = require('./scripts/jacobi.js');
 const latex = require('./scripts/latex.js')
 const basic = require('./scripts/basic.js')
 const fs = require('fs')
+//const keyboard = require('./scripts/keyboard.js');
 
 const token = '1681110137:AAEmEwDuJFK-lps4pD4uL6LKPrSE3zRtACI';
 const bot = new Telegraf(token);
@@ -16,6 +17,10 @@ bot.telegram.setWebhook("https://api.queuebot.me");
 
 function getMessage(path) {
     return fs.readFileSync(`messages/${path}`, 'utf8');
+}
+
+whitelist = {
+
 }
 
 bot.on('message',(ctx,next) => {
@@ -34,7 +39,7 @@ bot.help((ctx) => {
     ctx.reply(getMessage('help.txt'));
 });
 
-bot.command(['gcd', 'lineareq', 'poleq', 'jacobi', 'rootmod', 'cancel'], (ctx) => {
+bot.command(['gcd', 'lineareq', 'poleq', 'jacobi', 'rootmod', 'cancel', 'markov'], (ctx) => {
     const id = ctx.message.from.id, command = ctx.message.text.split(' ')[0].substring(1);
     let user = JSON.parse(fs.readFileSync(`users/${id}.json`).toString());
     if (command === 'cancel') {
@@ -66,6 +71,9 @@ bot.on('text', async (ctx) => {
             break;
         case 'rootmod':
             await rootmod_problem(ctx);
+            break;
+        case 'markov':
+            await markov_problem(ctx);
             break;
         default:
             ctx.reply(getMessage('help.txt'));
@@ -144,6 +152,72 @@ async function lineareq_problem(ctx) {
     } finally {
         await fs.promises.rm(`temp/${id}`, {recursive: true});
     }
+}
+
+async function markov_problem(ctx){
+    const id = ctx.message.from.id;
+    if (!fs.existsSync(`temp/${id}`))
+        await fs.promises.mkdir(`temp/${id}`);
+    try {
+        markov_req = markov_parse(ctx.message.text);
+
+        if(markov_req  == "parse error"){
+            ctx.reply("Не правильний ввід")
+        } else {
+            //const split = ctx.message.text.split(' ');
+
+            await execute(`./scripts/cpp/mathlog/markov ${markov_req} temp/${id}/solution.tex`);
+            await execute(`latex solution.tex`, {cwd: `temp/${id}`});
+            await execute(`dvipng solution.dvi -D 600`, {cwd: `temp/${id}`});
+
+            const images = [];
+            for (let i = 1; fs.existsSync(`temp/${id}/solution${i}.png`); ++i) {
+                images.push({
+                    media: {source: `temp/${id}/solution${i}.png`},
+                    type: 'photo'
+                });
+            }
+            await ctx.replyWithMediaGroup(images);
+        }
+    } catch (error) {
+        ctx.reply(error.toString());
+        console.error(error);
+    } finally {
+        await fs.promises.rm(`temp/${id}`, {recursive: true});
+    }
+}
+
+function markov_parse(s){
+    var act = false;
+    var rule_arr = [];
+    var k = 0;
+    var str = "";
+    var letters = /^[0-9a-zA-Z]+$/;
+    for(i = 0; i < s.length; i++){
+        str = s[i];
+        if(letters.test(str)){
+            if(!act){
+                act = true;
+                rule_arr[k] = s[i];
+            }else{
+                rule_arr[k] += s[i];
+            }
+        }else{
+            if(act){
+                act = false;
+                k += 1;
+            }
+        }
+    }
+    s = ""
+    if(rule_arr.length % 2 == 1){
+        for(i = 0; i < rule_arr.length; i++){
+            s += `${rule_arr[i]} `
+        }
+    }else{
+        s = "parse error"
+    }
+    return s;
 }
 
 function poleq_problem(ctx) {
