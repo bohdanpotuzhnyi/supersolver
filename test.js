@@ -93,14 +93,25 @@ function execute(cmd, opts={}) {
     });
 }
 
+function secureParsing(number) {
+    let result = Number(number);
+    if (Math.abs(result) <= Number.MAX_SAFE_INTEGER) {
+        return result
+    }
+    else {
+        throw "Number is too large or too small";
+    }
+}
+
 async function gcd_problem(ctx) {
     const id = ctx.message.from.id;
     if (!fs.existsSync(`temp/${id}`))
         await fs.promises.mkdir(`temp/${id}`);
     try {
         const split = ctx.message.text.split(' ');
-        const m1 = parseInt(split[0]);
-        const n1 = parseInt(split[1]);
+        split.forEach(secureParsing);
+        const m1 = split[0];
+        const n1 = split[1];
         if((m1 > 1) && (n1 > 1)) {
             let s = basic.display_ea(m1, n1);
             await latex.writetex(id, s);
@@ -130,6 +141,7 @@ async function lineareq_problem(ctx) {
     try {
         const split = ctx.message.text.split(' ');
         if (split[2] > 0) {
+            split.forEach(secureParsing);
             await execute(`./scripts/cpp/dm/linearequation ${split[0]} ${split[1]} ${split[2]} temp/${id}/solution.tex`);
             await execute(`latex solution.tex`, {cwd: `temp/${id}`});
             await execute(`dvipng solution.dvi -D 600`, {cwd: `temp/${id}`});
@@ -230,8 +242,9 @@ async function jacobi_problem(ctx) {
         await fs.promises.mkdir(`temp/${id}`);
     try {
         const split = ctx.message.text.split(' ');
-        const m1 = parseInt(split[0]);
-        const n1 = parseInt(split[1]);
+        split.forEach(secureParsing);
+        const m1 = split[0];
+        const n1 = split[1];
         if((m1 > 1) && (n1 > 2) && (n1 % 2 !== 0)) {
             const s = jacobi.jac_custom(m1, n1);
             await latex.writetex(id, s.s)
@@ -260,8 +273,9 @@ async function rootmod_problem(ctx) {
         await fs.promises.mkdir(`temp/${id}`);
     try {
         const split = ctx.message.text.split(' ');
-        const a = parseInt(split[0]);
-        const p = parseInt(split[1]);
+        split.forEach(secureParsing);
+        const a = split[0];
+        const p = split[1];
         if((a > 0) && (p > 2)){
             if(basic.prime(p)){
                 const jacs = jacobi.jac_custom(a, p)
