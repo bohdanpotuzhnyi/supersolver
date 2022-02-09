@@ -39,7 +39,7 @@ bot.help((ctx) => {
     ctx.reply(getMessage('help.txt'));
 });
 
-bot.command(['gcd', 'lineareq', 'poleq', 'jacobi', 'rootmod', 'cancel', 'markov'], (ctx) => {
+bot.command(['gcd', 'lineareq', 'poleq', 'jacobi', 'rootmod', 'cancel', 'markov', 'feedback'], (ctx) => {
     const id = ctx.message.from.id, command = ctx.message.text.split(' ')[0].substring(1);
     let user = JSON.parse(fs.readFileSync(`users/${id}.json`).toString());
     if (command === 'cancel') {
@@ -74,6 +74,9 @@ bot.on('text', async (ctx) => {
             break;
         case 'markov':
             await markov_command(ctx);
+            break;
+        case 'feedback':
+            await feedback_command(ctx);
             break;
         default:
             ctx.reply(getMessage('help.txt'));
@@ -303,6 +306,16 @@ async function rootmod_command(ctx) {
     } finally {
         await fs.promises.rm(`temp/${id}`, {recursive: true});
     }
+}
+
+const admins = [341421484/*, 497327654*/]
+
+function feedback_command(ctx) {
+    for (const admin of admins) {
+        ctx.forwardMessage(admin);
+        bot.telegram.sendMessage(admin, `Новое сообщение от [${ctx.message.from.id}](tg://user?id=${ctx.message.from.id})`, { parse_mode: 'MarkdownV2' });
+    }
+    ctx.reply("Сообщение отправлено")
 }
 
 if (clusterWorkerSize > 1) {
