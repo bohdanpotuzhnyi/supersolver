@@ -308,7 +308,7 @@ async function rootmod_command(ctx) {
     }
 }
 
-const admins = [341421484/*, 497327654*/]
+const admins = [341421484, 497327654]
 
 function feedback_command(ctx) {
     for (const admin of admins) {
