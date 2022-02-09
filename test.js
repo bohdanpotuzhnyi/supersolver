@@ -39,7 +39,7 @@ bot.help((ctx) => {
     ctx.reply(getMessage('help.txt'));
 });
 
-bot.command(['gcd', 'lineareq', 'poleq', 'jacobi', 'rootmod', 'cancel', 'markov'], (ctx) => {
+bot.command(['gcd', 'lineareq', 'poleq', 'jacobi', 'rootmod', 'cancel', 'markov', 'feedback'], (ctx) => {
     const id = ctx.message.from.id, command = ctx.message.text.split(' ')[0].substring(1);
     let user = JSON.parse(fs.readFileSync(`users/${id}.json`).toString());
     if (command === 'cancel') {
@@ -48,7 +48,7 @@ bot.command(['gcd', 'lineareq', 'poleq', 'jacobi', 'rootmod', 'cancel', 'markov'
     }
     else {
         user.state = command;
-        ctx.reply(getMessage(`problems/${command}.txt`));
+        ctx.reply(getMessage(`commands/${command}.txt`));
     }
     fs.writeFileSync(`users/${id}.json`, JSON.stringify(user));
 });
@@ -58,22 +58,25 @@ bot.on('text', async (ctx) => {
     const user = JSON.parse(fs.readFileSync(`users/${id}.json`).toString());
     switch (user.state) {
         case 'gcd':
-            await gcd_problem(ctx);
+            await gcd_command(ctx);
             break;
         case 'lineareq':
-            await lineareq_problem(ctx);
+            await lineareq_command(ctx);
             break;
         case 'poleq':
-            await poleq_problem(ctx);
+            await poleq_command(ctx);
             break;
         case 'jacobi':
-            await jacobi_problem(ctx);
+            await jacobi_command(ctx);
             break;
         case 'rootmod':
-            await rootmod_problem(ctx);
+            await rootmod_command(ctx);
             break;
         case 'markov':
-            await markov_problem(ctx);
+            await markov_command(ctx);
+            break;
+        case 'feedback':
+            await feedback_command(ctx);
             break;
         default:
             ctx.reply(getMessage('help.txt'));
@@ -103,7 +106,7 @@ function secureParsing(number) {
     }
 }
 
-async function gcd_problem(ctx) {
+async function gcd_command(ctx) {
     const id = ctx.message.from.id;
     if (!fs.existsSync(`temp/${id}`))
         await fs.promises.mkdir(`temp/${id}`);
@@ -134,7 +137,7 @@ async function gcd_problem(ctx) {
     }
 }
 
-async function lineareq_problem(ctx) {
+async function lineareq_command(ctx) {
     const id = ctx.message.from.id;
     if (!fs.existsSync(`temp/${id}`))
         await fs.promises.mkdir(`temp/${id}`);
@@ -166,7 +169,7 @@ async function lineareq_problem(ctx) {
     }
 }
 
-async function markov_problem(ctx){
+async function markov_command(ctx){
     const id = ctx.message.from.id;
     if (!fs.existsSync(`temp/${id}`))
         await fs.promises.mkdir(`temp/${id}`);
@@ -232,11 +235,11 @@ function markov_parse(s){
     return s;
 }
 
-function poleq_problem(ctx) {
+function poleq_command(ctx) {
     ctx.reply('poleq is in development');
 }
 
-async function jacobi_problem(ctx) {
+async function jacobi_command(ctx) {
     const id = ctx.message.from.id;
     if (!fs.existsSync(`temp/${id}`))
         await fs.promises.mkdir(`temp/${id}`);
@@ -267,7 +270,7 @@ async function jacobi_problem(ctx) {
     }
 }
 
-async function rootmod_problem(ctx) {
+async function rootmod_command(ctx) {
     const id = ctx.message.from.id;
     if (!fs.existsSync(`temp/${id}`))
         await fs.promises.mkdir(`temp/${id}`);
@@ -303,6 +306,16 @@ async function rootmod_problem(ctx) {
     } finally {
         await fs.promises.rm(`temp/${id}`, {recursive: true});
     }
+}
+
+const admins = [341421484, 497327654]
+
+function feedback_command(ctx) {
+    for (const admin of admins) {
+        ctx.forwardMessage(admin);
+        bot.telegram.sendMessage(admin, `Новое сообщение от [${ctx.message.from.id}](tg://user?id=${ctx.message.from.id})`, { parse_mode: 'MarkdownV2' });
+    }
+    ctx.reply("Сообщение отправлено")
 }
 
 if (clusterWorkerSize > 1) {
