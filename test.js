@@ -39,16 +39,20 @@ bot.help((ctx) => {
     ctx.reply(getMessage('help.txt'));
 });
 
-bot.command(['gcd', 'lineareq', 'poleq', 'jacobi', 'rootmod', 'cancel', 'markov', 'feedback'], (ctx) => {
+bot.command(['gcd', 'lineareq', 'poleq', 'jacobi', 'rootmod', 'cancel', 'markov', 'feedback', 'donate'], (ctx) => {
     const id = ctx.message.from.id, command = ctx.message.text.split(' ')[0].substring(1);
     let user = JSON.parse(fs.readFileSync(`users/${id}.json`).toString());
-    if (command === 'cancel') {
-        user.state = null;
-        ctx.reply(getMessage('cancel.txt'));
-    }
-    else {
-        user.state = command;
-        ctx.reply(getMessage(`commands/${command}.txt`));
+    switch (command) {
+        case 'cancel':
+            user.state = null;
+            ctx.reply(getMessage('cancel.txt'));
+            break;
+        case 'donate':
+            ctx.reply(getMessage(`donate.txt`));
+            break;
+        default:
+            user.state = command;
+            ctx.reply(getMessage(`commands/${command}.txt`));
     }
     fs.writeFileSync(`users/${id}.json`, JSON.stringify(user));
 });
