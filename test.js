@@ -3,6 +3,7 @@ const os = require("os");
 const cluster = require("cluster");
 const { exec } = require('child_process');
 const { Telegraf } = require('telegraf');
+const { Extra } = require('telegraf')
 const jacobi = require('./scripts/jacobi.js');
 const latex = require('./scripts/latex.js')
 const basic = require('./scripts/basic.js')
@@ -36,7 +37,7 @@ bot.start((ctx) => {
 });
 
 bot.help((ctx) => {
-    ctx.reply(getMessage('help.txt'));
+    ctx.replyWithMarkdown(getMessage('help.txt'));
 });
 
 bot.command(['gcd', 'lineareq', 'poleq', 'jacobi', 'rootmod', 'cancel', 'markov', 'feedback', 'donate'], (ctx) => {
