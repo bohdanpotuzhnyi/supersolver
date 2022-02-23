@@ -40,7 +40,7 @@ bot.help((ctx) => {
     ctx.replyWithMarkdown(getMessage('help.txt'));
 });
 
-bot.command(['gcd', 'lineareq', 'poleq', 'jacobi', 'rootmod', 'cancel', 'markov', 'feedback', 'donate'], (ctx) => {
+bot.command(['gcd', 'lineareq', 'jacobi', 'rootmod', 'cancel', 'markov', 'feedback', 'donate'], (ctx) => {
     const id = ctx.message.from.id, command = ctx.message.text.split(' ')[0].substring(1);
     let user = JSON.parse(fs.readFileSync(`users/${id}.json`).toString());
     switch (command) {
@@ -67,9 +67,6 @@ bot.on('text', async (ctx) => {
             break;
         case 'lineareq':
             await lineareq_command(ctx);
-            break;
-        case 'poleq':
-            await poleq_command(ctx);
             break;
         case 'jacobi':
             await jacobi_command(ctx);
@@ -238,10 +235,6 @@ function markov_parse(s){
         s = "parse error"
     }
     return s;
-}
-
-function poleq_command(ctx) {
-    ctx.reply('poleq is in development');
 }
 
 async function jacobi_command(ctx) {
