@@ -81,7 +81,7 @@ bot.on('text', async (ctx) => {
             await feedback_command(ctx);
             break;
         default:
-            ctx.reply(getMessage('help.txt'));
+            ctx.replyWithMarkdown(getMessage('help.txt'));
     }
     user.state = null;
     fs.writeFileSync(`users/${id}.json`, JSON.stringify(user));
